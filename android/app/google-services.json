@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "194057831721",
+    "project_id": "recommedation-flutter-app",
+    "storage_bucket": "recommedation-flutter-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:194057831721:android:f67bc344de0d7bfcf02338",
+        "android_client_info": {
+          "package_name": "com.example.recommendation_flutter_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "194057831721-nbeaf0hodps3iobdqkltg3l1ggqbp2jk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhFGzhM1cfm7Gz1pINi4pU-6kGcCEUMH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "194057831721-nbeaf0hodps3iobdqkltg3l1ggqbp2jk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
