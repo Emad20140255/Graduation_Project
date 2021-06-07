@@ -5,18 +5,20 @@ import 'package:http/http.dart' as http;
 
 
 
-class Restaurant {
-  String Name;
-  String Description;
-  String IconImagePath;
-  String CoverImagePath;
-  String PhoneNumber;
-  String Address;
-  String WorkingHours;
+class Cinema {
+  String name_Arabic;
+  String name_English;
+  String address;
+  String area;
+  String governorate;
+  String image_link;
+  String location;
+  String phone;
+  String rate;
   final fireStore = FirebaseDatabase.instance;
-  List <Restaurant>restaurantsList =[];
-  Restaurant(this.Name,this.Description ,this.Address,this.PhoneNumber,this.CoverImagePath,this.IconImagePath,this.WorkingHours);
-
+  List <Cinema>cinemasList =[];
+  Cinema(this.name_Arabic,this.name_English ,this.address,this.area,this.governorate,this.image_link,this.location,this.phone,this.rate);
+/*
   Future <void> Fetch()async{
     final url = Uri.parse("https://recommedation-flutter-app-default-rtdb.firebaseio.com/Restaurants.json");
 
@@ -27,9 +29,9 @@ class Restaurant {
        print(json.decode(res.body));
        final extractedData = json.decode(res.body) as Map<String, dynamic>;
        extractedData.forEach((key, value) {
-         var isExist = restaurantsList.firstWhere((element) => element.Name ==Name,orElse:()=>null);
+         var isExist = cinemasList.firstWhere((element) => element.Name ==Name,orElse:()=>null);
          if(isExist==null){
-           restaurantsList.add(Restaurant(value['Name'], value['Description'], value['Address'], value['PhoneNumber'], value['CoverImagePath'], value['IconImagePath'], value['WorkingHours']));
+           cinemasList.add(Cinema(value['Name'], value['Description'], value['Address'], value['PhoneNumber'], value['CoverImagePath'], value['IconImagePath'], value['WorkingHours']));
 
          }
        });
@@ -41,4 +43,5 @@ class Restaurant {
 
 
   }
+  */
 }

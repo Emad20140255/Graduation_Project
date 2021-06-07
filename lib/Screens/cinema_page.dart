@@ -1,58 +1,51 @@
-
+import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
-import 'package:flutter/material.dart';
-import 'package:recommendation_flutter_app/Screens/add_category.dart';
-import 'package:recommendation_flutter_app/Screens/restaurants_page.dart';
-import 'package:recommendation_flutter_app/Screens/edit_category.dart';
-import 'package:recommendation_flutter_app/Widgets/sideBar.dart';
+import 'package:provider/provider.dart';
+import 'package:recommendation_flutter_app/Models/restaurant.dart';
+import 'package:recommendation_flutter_app/Screens/add_restaurant.dart';
 
-import 'cinema_page.dart';
+import 'edit_restaurant.dart';
 
-class Categories extends StatefulWidget {
+class CinemasPage  extends StatefulWidget {
 
-  String categoname;
+  String SelectCategory;
 
-  static const routeName = '/Categories';
-  Categories({this.categoname});
-
-  void selectCategory(BuildContext ctx){
-Navigator.of(ctx).pushNamed(RestaurantsPage.routeName,
-arguments: {
-  'Name' : categoname,
-},
-);
-}
-
-  @override
-  _CategoriesState createState() => _CategoriesState();
-}
-
-class _CategoriesState extends State<Categories> {
-Query _ref;
-DatabaseReference reference = FirebaseDatabase.instance.reference().child('Categories');
- 
-
-
-
-
-
-
-@override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    _ref = FirebaseDatabase.instance.reference().child('Categories');
-  }
+  String PageKey;
+  CinemasPage();
+  static const routeName ='/Cinemas';
 
   
+  @override
+  _CinemasPageState createState() => _CinemasPageState();
+}
 
-  Widget _buildCategoryItem({Map category}){
-    String categoname;
+class _CinemasPageState extends State<CinemasPage> {
+  Query referenceData;
+  DatabaseReference reference = FirebaseDatabase.instance.reference().child('Cinemas').child('Movies_in_each_cinema');
+  
+  List<Restaurant>DataList=[];
+bool _isLooding = true;  
+
+  @override
+  void initState() {
+    super.initState();
+    referenceData = FirebaseDatabase.instance.reference().child('All_Cinemas').child('Cinemas');
+    
+    
+
+    
+   
+    
+  }
+
+
+    Widget _buildCategoryItem({Map cinemas}){
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),
       padding: EdgeInsets.all(5),
-      height: 100,
+      height: 400,
+      width:  double.infinity,
       color: Colors.white,
       child: Expanded(
               child: Column(
@@ -62,39 +55,47 @@ DatabaseReference reference = FirebaseDatabase.instance.reference().child('Categ
             SizedBox(height: 5,),
             Expanded(
              child: InkWell(
-               
-              onTap: () {if (category['Category_name'] == 'Restaurants') {
-
-                Navigator.push(context, MaterialPageRoute(builder: (_)=> RestaurantsPage()));
-                }
-                if (category['Category_name'] == 'Cinemas') {
+              onTap: () {},
+              child: Card(
+             child: Column(
                   
-                } else {
-                }{
-                  Navigator.push(context, MaterialPageRoute(builder: (_)=> CinemasPage()));
+                  children: [
+                SizedBox(width: 6,),
+                Container(
+                  height: 250,
+                  width: double.infinity, 
+                  child: Image.network(cinemas['image_link']),),
+                SizedBox(height: 18,),
+                Container(
+                  height: 40,
+                  width:  double.infinity,
+                  child:  Text(cinemas['name_English'],
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
 
-                }
-
-              }
-
-              
-              ,
-                
-              child: Row(
-                
-                children: [
-              Icon(Icons.category_sharp,color: Color(0xFF262AAA),size: 20,),
-              SizedBox(width: 6,),
-              Text(category['Category_name'],
-              style: TextStyle(
-                fontSize: 25,
-                color: Colors.black,
-                fontWeight: FontWeight.w600,
-
+                  ),
+                  ),
                 ),
+               
+                SizedBox(width: 6,),
+                 Container(
+                 height: 40,
+                 width:  double.infinity,
+                  child:  Text(cinemas['name_Arabic'],
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+
+                  ),
+                  ),
                 ),
-                ]
-                ),
+
+                  ]
+                  ),
+              ),
                         ),
             ),
               Row(
@@ -103,10 +104,10 @@ DatabaseReference reference = FirebaseDatabase.instance.reference().child('Categ
               GestureDetector(
                 
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (_)=> EditCategory(categoryKey: category['Key'],)));
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=> EditRestaurant(RestaurantKey: cinemas['Key'],)));
                 },
                 child: Expanded(
-                                child: Row(
+                   child: Row(
                     children: [
                       Icon(Icons.edit , color: Color(0xFF262AAA),),
 
@@ -127,7 +128,7 @@ DatabaseReference reference = FirebaseDatabase.instance.reference().child('Categ
               GestureDetector(
                 
                 onTap: (){
-                  ShowDeleteDailog(category:category);
+                  ShowDeleteDailog(cinema:cinemas);
                 },
                 child: Expanded(
                                 child: Row(
@@ -149,6 +150,7 @@ DatabaseReference reference = FirebaseDatabase.instance.reference().child('Categ
               SizedBox(width:20 ,),
               ]
             ),
+           
 
           ],
           ),
@@ -156,12 +158,13 @@ DatabaseReference reference = FirebaseDatabase.instance.reference().child('Categ
     );
   }
 
-  ShowDeleteDailog({Map category}){
+
+   ShowDeleteDailog({Map cinema}){
     showDialog(
       context: context,
        builder: (context){
          return AlertDialog(
-           title: Text('Delete ${category['Category_name']}'),
+           title: Text('Delete ${cinema['movie_name']}'),
            content: Text('Are You Sure You Want To Delete?'),
            actions: [
               FlatButton(onPressed: () {  
@@ -170,7 +173,7 @@ DatabaseReference reference = FirebaseDatabase.instance.reference().child('Categ
            child: Text('Cancel'),
            ),
              FlatButton(onPressed: () {  
-               reference.child(category['Key']).remove().whenComplete(() => Navigator.pop(context));           
+               reference.child(cinema['Key']).remove().whenComplete(() => Navigator.pop(context));           
            },
            child: Text('Delete'),
            ),
@@ -181,46 +184,46 @@ DatabaseReference reference = FirebaseDatabase.instance.reference().child('Categ
 
   }
 
+
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context){
     return Scaffold(
-      drawer:SideBar(),
-    
-      appBar: AppBar(
+       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-       // title: Text(
-        //  "Categories",
-        //  style: TextStyle( color: Color(0xFF262AAA),fontSize: 35,fontWeight: FontWeight.bold),
-      //  ),
         
-        centerTitle: true,
       ),
-      
-        body: Container(
+      body:Container(
           height: double.infinity,
-          
-          child: FirebaseAnimatedList(query:_ref ,itemBuilder: (BuildContext context,DataSnapshot snapshot,Animation<double>animation,int index ){
-            Map category = snapshot.value;
-            category['Key'] = snapshot.key;
-            return _buildCategoryItem(category: category);
-          },),
+          child: FirebaseAnimatedList(query:referenceData ,itemBuilder: (BuildContext context,DataSnapshot snapshot,Animation<double>animation,int index ){
+              Map Movie_In_Each_Cinema = snapshot.value;
+              Movie_In_Each_Cinema['Key'] = snapshot.key;
+              return _buildCategoryItem(cinemas: Movie_In_Each_Cinema);
+            },),
         ),
-        floatingActionButton: FloatingActionButton(
+      
+       floatingActionButton: FloatingActionButton(
           backgroundColor: Color(0xFF262AAA),
           onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (_){
-              return AddCategory();
+              return AddRestaurant();
 
-            }));
+      
+    
+  }
 
+  
+
+      ),
+    );
+  
           },
           child: Icon(
             Icons.add,
             color: Colors.white,
             ),
-          ),
-      
+
+       )
     );
   }
 }
