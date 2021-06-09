@@ -2,30 +2,32 @@ import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 
 
-class AddRestaurant extends StatefulWidget {
+class AddCinema extends StatefulWidget {
 
-   static const routeName ='/AddRestaurant';
+   static const routeName ='/AddCinema';
 
   @override
-  _AddRestaurantState createState() => _AddRestaurantState();
+  _AddCinemaState createState() => _AddCinemaState();
 }
 
-class _AddRestaurantState extends State<AddRestaurant> {
-   TextEditingController _Restaurant_nameController = new TextEditingController();
-   TextEditingController _Description_Controller = new TextEditingController();
-   TextEditingController _PhoneNumber_Controller = new TextEditingController();
-   TextEditingController _Address_Controller = new TextEditingController();
-   TextEditingController _IconImagePath_Controller = new TextEditingController();
-   TextEditingController _CoverImagePath_Controller = new TextEditingController();
-   TextEditingController _WorkingHours_Controller = new TextEditingController();
-   String Restaurant_name;
+class _AddCinemaState extends State<AddCinema> {
+  TextEditingController _name_English_Controller = new TextEditingController();
+  TextEditingController _name_Arabic_Controller = new TextEditingController();
+  TextEditingController _area_Controller = new TextEditingController();
+  TextEditingController _phone_Controller = new TextEditingController();
+  TextEditingController _address_Controller = new TextEditingController();
+  TextEditingController _governorate_Controller = new TextEditingController();
+  TextEditingController _image_link_Controller = new TextEditingController();
+  TextEditingController _location_Controller = new TextEditingController();
+
+   String Cinema_name;
    DatabaseReference _ref;
 
     @override
    void initState() {
      super.initState();
-     _Restaurant_nameController = TextEditingController();
-     _ref = FirebaseDatabase.instance.reference().child('Restaurants');
+     _name_English_Controller = TextEditingController();
+     _ref = FirebaseDatabase.instance.reference().child('All_Cinemas').child('Cinemas');
 
    }
 
@@ -65,7 +67,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         title: Text(
-          " Add Restaurant",
+          " Add Cinema",
           style: TextStyle(color: Colors.black,fontSize: 25,fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
@@ -84,9 +86,20 @@ class _AddRestaurantState extends State<AddRestaurant> {
             children: [
               SizedBox(height: 50,),
               TextFormField(
-                controller: _Restaurant_nameController,
+                controller: _name_English_Controller,
                 decoration: InputDecoration(
-                  hintText: 'Enter Restaurant Name ',
+                  hintText: 'Enter Cinema English Name ',
+                
+                  fillColor: Colors.white,
+                  filled: true,
+                  contentPadding: EdgeInsets.all(15),
+                ),
+              ),
+              SizedBox(height: 25),
+               TextFormField(
+                controller: _name_Arabic_Controller,
+                decoration: InputDecoration(
+                  hintText: 'Enter Cinema Arabic Name ',
                 
                   fillColor: Colors.white,
                   filled: true,
@@ -95,9 +108,9 @@ class _AddRestaurantState extends State<AddRestaurant> {
               ),
               SizedBox(height: 25),
               TextFormField(
-                controller: _Description_Controller,
+                controller: _area_Controller,
                 decoration: InputDecoration(
-                  hintText: 'Enter Restaurant Description ',
+                  hintText: 'Enter Cinema Area ',
                  
                   fillColor: Colors.white,
                   filled: true,
@@ -106,9 +119,9 @@ class _AddRestaurantState extends State<AddRestaurant> {
               ),
               SizedBox(height: 25),
               TextFormField(
-                controller: _Address_Controller,
+                controller: _phone_Controller,
                 decoration: InputDecoration(
-                  hintText: 'Enter Restaurant Address ',
+                  hintText: 'Enter Cinema Phone ',
                   
                   fillColor: Colors.white,
                   filled: true,
@@ -117,9 +130,9 @@ class _AddRestaurantState extends State<AddRestaurant> {
               ),
               SizedBox(height: 15),
               TextFormField(
-                controller: _PhoneNumber_Controller,
+                controller: _address_Controller,
                 decoration: InputDecoration(
-                  hintText: 'Enter Restaurant Phone Number ',
+                  hintText: 'Enter Cinema Address ',
                  
                   fillColor: Colors.white,
                   filled: true,
@@ -128,9 +141,9 @@ class _AddRestaurantState extends State<AddRestaurant> {
               ),
               SizedBox(height: 15),
               TextFormField(
-                controller: _CoverImagePath_Controller,
+                controller: _governorate_Controller,
                 decoration: InputDecoration(
-                  hintText: 'Enter Restaurant Cover Image ',
+                  hintText: 'Enter Cinema Governorate',
                   
                   fillColor: Colors.white,
                   filled: true,
@@ -139,9 +152,9 @@ class _AddRestaurantState extends State<AddRestaurant> {
               ),
               SizedBox(height: 15),
               TextFormField(
-                controller: _IconImagePath_Controller,
+                controller: _image_link_Controller,
                 decoration: InputDecoration(
-                  hintText: 'Enter Restaurant Icon Image',
+                  hintText: 'Enter Cinema Image Path',
                   
                   fillColor: Colors.white,
                   filled: true,
@@ -150,9 +163,9 @@ class _AddRestaurantState extends State<AddRestaurant> {
               ),
               SizedBox(height: 25),
               TextFormField(
-                controller: _WorkingHours_Controller,
+                controller: _location_Controller,
                 decoration: InputDecoration(
-                  hintText: 'Enter Restaurant Working Hours ',
+                  hintText: 'Enter Cinema Location ',
                   
                   fillColor: Colors.white,
                   filled: true,
@@ -168,7 +181,7 @@ class _AddRestaurantState extends State<AddRestaurant> {
                 child: RaisedButton(onPressed: (){
                   SaveCategory();
                 },
-                child: Text('Add Restaurant', style: TextStyle(
+                child: Text('Add Cinema', style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,
                   fontWeight: FontWeight.w600,
@@ -189,25 +202,29 @@ class _AddRestaurantState extends State<AddRestaurant> {
     
   }
   void SaveCategory(){
-      String Restaurant_name = _Restaurant_nameController.text;
-      String Description = _Description_Controller.text;
-      String Address = _Address_Controller.text;
-      String PhoneNumber= _PhoneNumber_Controller.text;
-      String CoverImagePath = _CoverImagePath_Controller.text;
-      String IconImagePath = _IconImagePath_Controller.text;
-      String WorkingHours = _WorkingHours_Controller.text;
 
-      Map<String,String> rest = {
-        'Name' : Restaurant_name,
-        'Description': Description,
-        'Address':Address,
-        'PhoneNumber': PhoneNumber,
-        'CoverImagePath': CoverImagePath,
-        'IconImagePath': IconImagePath,
-        'WorkingHours': WorkingHours,
+      String nameEnglish = _name_English_Controller.text;
+      String nameArabic = _name_Arabic_Controller.text;
+      String area = _area_Controller.text;
+      String phone= _phone_Controller.text;
+      String address = _address_Controller.text;
+      String governorate = _governorate_Controller.text;
+      String imageLink = _image_link_Controller.text;
+      String location = _location_Controller.text;
+
+
+      Map<String,String> cinemaa = {
+        'name_English': nameEnglish,
+        'name_Arabic': nameArabic,
+        'area': area,
+        'phone':phone,
+        'address': address,
+        'governorate': governorate,
+        'image_link': imageLink,
+        'location': location,
       };
 
-      _ref.push().set(rest).then((value) {
+      _ref.push().set(cinemaa).then((value) {
         Navigator.pop(context);
 
       });

@@ -184,7 +184,7 @@ DatabaseReference reference = FirebaseDatabase.instance.reference().child('Categ
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer:SideBar(),
+      
     
       appBar: AppBar(
         backgroundColor: Colors.transparent,

@@ -3,7 +3,10 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_database/ui/firebase_animated_list.dart';
 import 'package:provider/provider.dart';
 import 'package:recommendation_flutter_app/Models/restaurant.dart';
+import 'package:recommendation_flutter_app/Screens/add_cinema.dart';
 import 'package:recommendation_flutter_app/Screens/add_restaurant.dart';
+import 'package:recommendation_flutter_app/Screens/cinema_details.dart';
+import 'package:recommendation_flutter_app/Screens/edit_cinema.dart';
 
 import 'edit_restaurant.dart';
 
@@ -22,7 +25,7 @@ class CinemasPage  extends StatefulWidget {
 
 class _CinemasPageState extends State<CinemasPage> {
   Query referenceData;
-  DatabaseReference reference = FirebaseDatabase.instance.reference().child('Cinemas').child('Movies_in_each_cinema');
+  DatabaseReference reference = FirebaseDatabase.instance.reference().child('All_Cinemas').child('Cinemas');
   
   List<Restaurant>DataList=[];
 bool _isLooding = true;  
@@ -30,13 +33,7 @@ bool _isLooding = true;
   @override
   void initState() {
     super.initState();
-    referenceData = FirebaseDatabase.instance.reference().child('All_Cinemas').child('Cinemas');
-    
-    
-
-    
-   
-    
+    referenceData = FirebaseDatabase.instance.reference().child('All_Cinemas').child('Cinemas').orderByChild('name_English');
   }
 
 
@@ -44,7 +41,7 @@ bool _isLooding = true;
     return Container(
       margin: EdgeInsets.symmetric(vertical: 5),
       padding: EdgeInsets.all(5),
-      height: 400,
+      height: 650,
       width:  double.infinity,
       color: Colors.white,
       child: Expanded(
@@ -62,14 +59,14 @@ bool _isLooding = true;
                   children: [
                 SizedBox(width: 6,),
                 Container(
-                  height: 250,
-                  width: double.infinity, 
+                  height: 350,
+                  width:double.infinity, 
                   child: Image.network(cinemas['image_link']),),
                 SizedBox(height: 18,),
                 Container(
                   height: 40,
                   width:  double.infinity,
-                  child:  Text(cinemas['name_English'],
+                  child:  Text("Name:${cinemas['name_English']}",
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.black,
@@ -79,11 +76,12 @@ bool _isLooding = true;
                   ),
                 ),
                
+                
                 SizedBox(width: 6,),
                  Container(
-                 height: 40,
+                 height: 70,
                  width:  double.infinity,
-                  child:  Text(cinemas['name_Arabic'],
+                  child:  Text("Address:${cinemas['address']}${cinemas['area']}${cinemas['governorate']}",
                 style: TextStyle(
                   fontSize: 15,
                   color: Colors.black,
@@ -92,6 +90,54 @@ bool _isLooding = true;
                   ),
                   ),
                 ),
+                SizedBox(width: 6,),
+                 Container(
+                 height: 40,
+                 width:  double.infinity,
+                  child:  Text("Phone:${cinemas['phone']}",
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+
+                  ),
+                  ),
+                ),
+                SizedBox(width: 6,),
+                 Container(
+                 height: 40,
+                 width:  double.infinity,
+                  child:  Text("Rate:${cinemas['rate']}",
+                style: TextStyle(
+                  fontSize: 15,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+
+                  ),
+                  ),
+                ),
+                SizedBox(width: 6,),
+                 GestureDetector(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=> CinemasDetails(PageKey: cinemas['name_English'],)));
+                },
+                child: Expanded(
+                  child: Row(
+                     mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Icon(Icons.edit , color: Color(0xFF262AAA),),
+                      SizedBox(width: 6,),
+                      Text('Movies',
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Color(0xFF262AAA),
+                        fontWeight: FontWeight.w600,
+                      ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
 
                   ]
                   ),
@@ -104,7 +150,7 @@ bool _isLooding = true;
               GestureDetector(
                 
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (_)=> EditRestaurant(RestaurantKey: cinemas['Key'],)));
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=> EditCinema(CinemaKey: cinemas['Key'],)));
                 },
                 child: Expanded(
                    child: Row(
@@ -206,7 +252,7 @@ bool _isLooding = true;
           backgroundColor: Color(0xFF262AAA),
           onPressed: (){
             Navigator.push(context, MaterialPageRoute(builder: (_){
-              return AddRestaurant();
+              return AddCinema();
 
       
     

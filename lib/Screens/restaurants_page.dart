@@ -72,9 +72,12 @@ bool _isLooding = true;
                   width:  double.infinity,
                   child: Row(
                   children: [
-                    CircleAvatar(
+                    Container(
+                      height: 60,
+                      width: 60,
+                    child: CircleAvatar(
                       backgroundImage: NetworkImage(restauraannt['IconImagePath'],
-                    )),
+                    ))),
                   Text(restauraannt['Name'],
                   style: TextStyle(
                   fontSize: 19,
@@ -136,7 +139,7 @@ bool _isLooding = true;
                 SizedBox(width: 6,),
                  GestureDetector(
                 onTap: (){
-                //  Navigator.push(context, MaterialPageRoute(builder: (_)=> RestaurantMenu(RestaurantKey: restauraannt['Key'],)));
+                  Navigator.push(context, MaterialPageRoute(builder: (_)=> RestaurantsMenu(PageKey: restauraannt['Name'],)));
                 },
                 child: Expanded(
                   child: Row(
